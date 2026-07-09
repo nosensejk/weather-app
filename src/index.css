@@ -1,168 +1,236 @@
+/* Подключение красивого геометрического шрифта Montserrat из Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  font-family: Inter, sans-serif;
-  color: white;
+html,
+body {
+  min-height: 100vh;
+  font-family: "Montserrat", sans-serif; /* Применяем новый шрифт ко всему проекту */
+  color: #ffffff;
+  background-color: #0b0f19;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; /* Делает шрифт более гладким в браузерах */
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ROOT */
 #root {
   width: 100%;
-  height: 100%;
 }
 
-/* APP */
+/* ==========================================================================
+   APP & WEATHER BACKGROUNDS
+   ========================================================================== */
 .app {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  padding: 20px;
-
-  transition: background-color 1s ease;
+  align-items: flex-start;
+  padding: 40px 20px;
+  transition: background 1s ease;
 }
 
-/* BACKGROUNDS */
 .app.clear {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  background: linear-gradient(135deg, #1c4e80, #1d5faf);
 }
-
 .app.clouds {
-  background: linear-gradient(135deg, #bdc3c7, #2c3e50);
+  background: linear-gradient(135deg, #3a4856, #1e2731);
 }
-
 .app.rain {
-  background: linear-gradient(135deg, #3a7bd5, #3a6073);
+  background: linear-gradient(135deg, #1a365d, #0f172a);
 }
-
 .app.snow {
-  background: linear-gradient(135deg, #e6dada, #274046);
+  background: linear-gradient(135deg, #2c3e50, #1a252f);
 }
-
 .app.storm {
-  background: linear-gradient(135deg, #141e30, #243b55);
+  background: linear-gradient(135deg, #111827, #030712);
 }
 
-
-/* LAYOUT (SIDEBAR WEATHER) */
+/* ==========================================================================
+   LAYOUT & GRID
+   ========================================================================== */
 .layout {
-  display: flex;
-  gap: 20px;
-
   width: 100%;
-  max-width: 1100px;
-
-  height: 100%;
-  align-items: center;
-  justify-content: center;
+  max-width: 1040px;
+  display: flex;
   flex-direction: column;
-}
-.main-info{
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
+  align-items: center;
+  gap: 24px;
 }
 
+.main-info {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  width: 100%;
+  align-items: start;
+}
+
+.content,
 .sidebar {
-  width: 30%;
-}
-
-.content {
   width: 100%;
-  max-width: 500px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 16px;
 }
 
-/* SEARCH */
-.search {
+/* ==========================================================================
+   SEARCH BAR (GLASSMORPHISM)
+   ========================================================================== */
+.search-container {
   display: flex;
   gap: 12px;
-  margin-bottom: 24px;
+  width: 100%;
+  max-width: 540px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.search input {
+.search-container:focus-within {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+.search-input {
   flex: 1;
   border: none;
   outline: none;
-
-  padding: 14px 18px;
-  border-radius: 14px;
+  background: transparent;
+  padding: 12px 14px;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
 }
 
-.search button {
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.search-button {
   border: none;
-  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 12px;
   border-radius: 14px;
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
 }
 
-.search button:hover {
-  transform: translateY(-2px);
+.search-button:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* WEATHER CARD */
+.search-button:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   MAIN WEATHER CARD
+   ========================================================================== */
 .weather-card {
-  backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.15);
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-
-  padding: 30px;
-
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 32px;
   text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-
-  width: 100%;
+.weather-card h1 {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .weather-card img {
-  height: 150px;
-  width: 150px;
-}
-.weather-card h1 {
-  font-size: 40px;
-}
-.weather-card h2 {
-  font-size: 28px;
+  height: 120px;
+  width: 120px;
+  margin: 8px 0;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
 }
 
-.temperature-desc {
-  margin-bottom: 10px;
+.temperature-desc h2 {
+  font-size: 68px; /* Чуть увеличили для весомости */
+  font-weight: 800; /* Жирное начертание для градусов смотрится шикарно */
+  line-height: 1;
+  letter-spacing: -2px;
 }
 
-/* WEATHER INFO GRID */
+.description {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 8px;
+  margin-bottom: 32px;
+  letter-spacing: 0.3px;
+}
+
+/* WEATHER INFO GRID (DETAILS) */
 .weather-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
-.weather-info div {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+.weather-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
   padding: 16px;
+  text-align: left;
+  transition: background 0.2s ease;
 }
 
-/* FORECAST (SIDEBAR STYLE) */
+.weather-info .info-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-icon {
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+}
+
+.info-text p {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.info-text small {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================================================
+   FORECAST SIDEBAR
+   ========================================================================== */
 .forecast {
   display: flex;
   flex-direction: column;
@@ -170,82 +238,143 @@ html, body {
 }
 
 .forecast-card {
-  backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.15);
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-
-  padding: 12px 16px;
-
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.forecast-card:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.forecast-day {
+  text-transform: capitalize;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
 }
 
 .forecast-card img {
-  width: 40px;
+  width: 44px;
+  height: 44px;
 }
 
-/* LOADER */
+.forecast-temp {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ==========================================================================
+   LOADER & ERROR MESSAGES
+   ========================================================================== */
 .loader-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin: 32px 0;
+  margin-top: 60px;
+}
+
+.loader-wrapper p {
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .loader {
-  width: 64px;
-  height: 64px;
-
-  border: 5px solid transparent;
-  border-top-color: white;
-
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ffffff;
   border-radius: 50%;
-
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* ERROR */
 .error-message {
-  margin-bottom: 20px;
-
-  padding: 14px;
-  border-radius: 14px;
-
-  background: rgba(255, 80, 80, 0.2);
-  border: 1px solid rgba(255, 80, 80, 0.4);
-
+  width: 100%;
+  max-width: 540px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   text-align: center;
-
-  backdrop-filter: blur(10px);
-
-  animation: shake 0.4s ease;
+  backdrop-filter: blur(8px);
+  font-weight: 500;
+  animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
 }
 
-/* RESPONSIVE */
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVE DESIGN)
+   ========================================================================== */
 @media (max-width: 900px) {
-  .layout {
-    flex-direction: column;
-    align-items: center;
+  .main-info {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 20px 12px;
   }
 
-  .sidebar {
-    width: 100%;
+  .weather-card {
+    padding: 24px 16px;
+  }
+
+  .weather-card h1 {
+    font-size: 26px;
+  }
+
+  .temperature-desc h2 {
+    font-size: 56px;
+  }
+
+  .weather-info {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .weather-info .info-item {
+    padding: 14px;
+  }
+
+  .forecast-card {
+    padding: 10px 16px;
+  }
+
+  .forecast-card:hover {
+    transform: none;
   }
 }

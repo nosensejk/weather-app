@@ -3,6 +3,8 @@ import WeatherCard from "./components/WeatherCard";
 import { useWeather } from "./hooks/useWeather";
 import Loader from "./components/Loader";
 import ForecastList from "./components/ForecastList";
+import { Search, CloudSun } from "lucide-react"; // Добавили иконку для приветствия
+import { motion } from "framer-motion";
 
 function App() {
   const [city, setCity] = useState("");
@@ -39,33 +41,57 @@ function App() {
     }
   };
 
+  // Проверяем, пустой ли экран (нет загрузки, нет ошибки и данные ещё не получены)
+  const isInitialState =
+    !loading && !error && !weather && forecast.length === 0;
+
   return (
     <div className={`app ${getBg(weather?.weather[0].main)}`}>
       <div className="layout">
-        <div className="search">
+        {/* КРАСИВОЕ ПРИВЕТСТВИЕ НА СТАРТЕ */}
+        {isInitialState && (
+          <motion.div
+            className="welcome-box"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <CloudSun size={64} className="welcome-icon" />
+            <h1>Weather App</h1>
+            <p>Узнайте точный прогноз погоды в любом городе прямо сейчас</p>
+          </motion.div>
+        )}
+        <div className="search-container">
           <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Введите город..."
+            className="search-input"
           />
-
-          <button onClick={() => fetchWeather(city)}>Поиск</button>
-          {/* ERROR */}
+          <button
+            onClick={handleSearch}
+            className="search-button"
+            aria-label="Поиск"
+          >
+            <Search size={20} />
+          </button>
         </div>
-        {error && <div className="error-message">{error}</div>}
-        {loading && <Loader/>}
-        {!loading && <div className="main-info">
-          <div className="content">
-            {/* WEATHER */}
-            {weather && <WeatherCard weather={weather} />}
-          </div>
 
-          {/* SIDEBAR FORECAST */}
-          <div className="sidebar">
-            {forecast.length > 0 && <ForecastList forecast={forecast} />}
+        {error && <div className="error-message">{error}</div>}
+        {loading && <Loader />}
+
+        {!loading && (weather || forecast.length > 0) && (
+          <div className="main-info">
+            <div className="content">
+              {weather && <WeatherCard weather={weather} />}
+            </div>
+
+            <div className="sidebar">
+              {forecast.length > 0 && <ForecastList forecast={forecast} />}
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );
